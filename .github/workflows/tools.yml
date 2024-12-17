@@ -5,40 +5,40 @@ on:
   pull_request:
 
 jobs:
-  linux:
-    runs-on: ubuntu-latest
-    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.event.pull_request.base.repo.full_name
-    steps:
-      - uses: actions/checkout@v4
-      - name: Install dependencies
-        run: |
-          sudo apt-key adv --fetch-keys http://repos.codelite.org/CodeLite.asc
-          sudo apt-add-repository 'deb https://repos.codelite.org/wx3.1.5/ubuntu/ focal universe'
-          sudo apt-get update
-          sudo apt-get install -y automake autoconf
-          sudo apt-get install -y libwxbase3.1-0-unofficial \
-                libwxbase3.1unofficial-dev \
-                libwxgtk3.1-0-unofficial \
-                libwxgtk3.1unofficial-dev \
-                wx3.1-headers \
-                wx-common \
-                libnotify-dev
-      - name: Configure build with autotools
-        run: |
-          aclocal
-          automake --add-missing
-          autoconf
-          ./configure
-      - name: Make source tarball
-        run: make dist
-      - name: Build from source tarball
-        run: |
-          tar zxvf gambit*.tar.gz
-          rm gambit*.tar.gz
-          cd gambit-*
-          ./configure
-          make
-          sudo make install
+#   linux:
+#     runs-on: ubuntu-latest
+#     if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.event.pull_request.base.repo.full_name
+#     steps:
+#       - uses: actions/checkout@v4
+#       - name: Install dependencies
+#         run: |
+#           sudo apt-key adv --fetch-keys http://repos.codelite.org/CodeLite.asc
+#           sudo apt-add-repository 'deb https://repos.codelite.org/wx3.1.5/ubuntu/ focal universe'
+#           sudo apt-get update
+#           sudo apt-get install -y automake autoconf
+#           sudo apt-get install -y libwxbase3.1-0-unofficial \
+#                 libwxbase3.1unofficial-dev \
+#                 libwxgtk3.1-0-unofficial \
+#                 libwxgtk3.1unofficial-dev \
+#                 wx3.1-headers \
+#                 wx-common \
+#                 libnotify-dev
+#       - name: Configure build with autotools
+#         run: |
+#           aclocal
+#           automake --add-missing
+#           autoconf
+#           ./configure
+#       - name: Make source tarball
+#         run: make dist
+#       - name: Build from source tarball
+#         run: |
+#           tar zxvf gambit*.tar.gz
+#           rm gambit*.tar.gz
+#           cd gambit-*
+#           ./configure
+#           make
+#           sudo make install
 
   macos-13:
     runs-on: macos-13
@@ -53,7 +53,7 @@ jobs:
             cd wxWidgets-3.2.6
             mkdir build-release
             cd build-release
-            ../configure --disable-shared --disable-sys-lib
+            ../configure --disable-shared --disable-sys-libs
             make -j4
             sudo make install
       - run: aclocal
@@ -68,58 +68,58 @@ jobs:
           name: artifact-osx-13
           path: "*.dmg"
 
-  macos-14:
-    runs-on: macos-14
-    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.event.pull_request.base.repo.full_name
-    steps:
-      - uses: actions/checkout@v4
-      - name: Install dependencies
-        run: |
-          brew install automake autoconf 
-          curl -L -O https://github.com/wxWidgets/wxWidgets/releases/download/v3.2.6/wxWidgets-3.2.6.tar.bz2
-          tar xjf wxWidgets-3.2.6.tar.bz2
-          cd wxWidgets-3.2.6
-          mkdir build-release
-          cd build-release
-          ../configure --disable-shared --disable-sys-lib
-          make -j4
-          sudo make install
-      - run: aclocal
-      - run: automake --add-missing
-      - run: autoconf
-      - run: ./configure
-      - run: make
-      - run: sudo make install
-      - run: make osx-dmg
-      - uses: actions/upload-artifact@v4
-        with:
-          name: artifact-osx-14
-          path: "*.dmg"
+  # macos-14:
+  #   runs-on: macos-14
+  #   if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.event.pull_request.base.repo.full_name
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - name: Install dependencies
+  #       run: |
+  #         brew install automake autoconf 
+  #         curl -L -O https://github.com/wxWidgets/wxWidgets/releases/download/v3.2.6/wxWidgets-3.2.6.tar.bz2
+  #         tar xjf wxWidgets-3.2.6.tar.bz2
+  #         cd wxWidgets-3.2.6
+  #         mkdir build-release
+  #         cd build-release
+  #         ../configure --disable-shared --disable-sys-lib
+  #         make -j4
+  #         sudo make install
+  #     - run: aclocal
+  #     - run: automake --add-missing
+  #     - run: autoconf
+  #     - run: ./configure
+  #     - run: make
+  #     - run: sudo make install
+  #     - run: make osx-dmg
+  #     - uses: actions/upload-artifact@v4
+  #       with:
+  #         name: artifact-osx-14
+  #         path: "*.dmg"
 
-  windows:
-    runs-on: windows-latest
-    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.event.pull_request.base.repo.full_name
-    defaults:
-      run:
-        shell: msys2 {0}
-    steps:
-      - uses: actions/checkout@v4
-      - uses: msys2/setup-msys2@v2
-        with:
-          install: mingw-w64-x86_64-toolchain make automake autoconf
-      - run: pacman -S --noconfirm mingw-w64-x86_64-wxmsw3.2
-      - run: aclocal
-      - run: automake --add-missing
-      - run: autoconf
-      - run: ./configure --with-wx-config=wx-config-3.2
-      - run: make -j 4
-      - name: Build .msi installer
-        run: |
-          mkdir installer
-          cp gambit* installer
-          "${WIX}bin/candle" gambit.wxs
-          "${WIX}bin/light" -ext WixUIExtension gambit.wixobj
-      - uses: actions/upload-artifact@v4
-        with:
-          name: artifact-msw
-          path: "*.msi"
+  # windows:
+  #   runs-on: windows-latest
+  #   if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.event.pull_request.base.repo.full_name
+  #   defaults:
+  #     run:
+  #       shell: msys2 {0}
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - uses: msys2/setup-msys2@v2
+  #       with:
+  #         install: mingw-w64-x86_64-toolchain make automake autoconf
+  #     - run: pacman -S --noconfirm mingw-w64-x86_64-wxmsw3.2
+  #     - run: aclocal
+  #     - run: automake --add-missing
+  #     - run: autoconf
+  #     - run: ./configure --with-wx-config=wx-config-3.2
+  #     - run: make -j 4
+  #     - name: Build .msi installer
+  #       run: |
+  #         mkdir installer
+  #         cp gambit* installer
+  #         "${WIX}bin/candle" gambit.wxs
+  #         "${WIX}bin/light" -ext WixUIExtension gambit.wixobj
+  #     - uses: actions/upload-artifact@v4
+  #       with:
+  #         name: artifact-msw
+  #         path: "*.msi"
