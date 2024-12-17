@@ -46,7 +46,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Install dependencies
-        run: brew install automake autoconf wxwidgets
+        run: |
+          brew install automake autoconf 
+            # install wxwidgets from source
+            curl -L -o wxWidgets-3.2.6.tar.bz2 https://github.com/wxWidgets/wxWidgets/releases/download/v3.2.6/wxWidgets-3.1.5.tar.bz2
+            tar xjf wxWidgets-3.2.6.tar.bz2
+            cd wxWidgets-3.2.6
+            mkdir build-release
+            cd build-release
+            ../configure --disable-shared --enable-unicode
+            make -j2
+            sudo make install
       - run: aclocal
       - run: automake --add-missing
       - run: autoconf
