@@ -81,7 +81,7 @@ jobs:
           cd wxWidgets-3.2.6
           mkdir build-release
           cd build-release
-          ../configure --disable-shared --enable-unicode
+          ../configure
           make -j2
           sudo make install
       - run: aclocal
