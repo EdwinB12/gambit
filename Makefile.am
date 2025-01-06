@@ -248,7 +248,6 @@ core_SOURCES = \
 	src/core/array.h \
 	src/core/list.h \
 	src/core/vector.h \
-	src/core/vector.imp \
 	src/core/recarray.h \
 	src/core/matrix.h \
 	src/core/matrix.imp \
@@ -258,7 +257,6 @@ core_SOURCES = \
 	src/core/integer.h \
 	src/core/rational.cc \
 	src/core/rational.h \
-	src/core/vector.cc \
 	src/core/matrix.cc \
 	src/core/sqmatrix.cc \
 	src/core/function.cc \
@@ -413,30 +411,13 @@ gambit_enumpoly_SOURCES = \
 	src/solvers/enumpoly/gpolylst.cc \
 	src/solvers/enumpoly/gpolylst.h \
 	src/solvers/enumpoly/gpolylst.imp \
-	src/solvers/enumpoly/gsolver.cc \
-	src/solvers/enumpoly/gsolver.h \
-	src/solvers/enumpoly/gsolver.imp \
-	src/solvers/enumpoly/ideal.cc \
-	src/solvers/enumpoly/ideal.h \
-	src/solvers/enumpoly/ideal.imp \
 	src/solvers/enumpoly/ineqsolv.cc \
 	src/solvers/enumpoly/ineqsolv.h \
 	src/solvers/enumpoly/ineqsolv.imp \
-	src/solvers/enumpoly/interval.h \
-	src/solvers/enumpoly/monomial.cc \
-	src/solvers/enumpoly/monomial.h \
-	src/solvers/enumpoly/monomial.imp \
-	src/solvers/enumpoly/poly.cc \
-	src/solvers/enumpoly/poly.h \
-	src/solvers/enumpoly/poly.imp \
-	src/solvers/enumpoly/prepoly.cc \
-	src/solvers/enumpoly/prepoly.h \
 	src/solvers/enumpoly/quiksolv.cc \
 	src/solvers/enumpoly/quiksolv.h \
 	src/solvers/enumpoly/quiksolv.imp \
-	src/solvers/enumpoly/rectangl.cc \
-	src/solvers/enumpoly/rectangl.h \
-	src/solvers/enumpoly/rectangl.imp \
+	src/solvers/enumpoly/rectangle.h \
 	src/solvers/enumpoly/behavextend.cc \
 	src/solvers/enumpoly/behavextend.h \
 	src/solvers/enumpoly/gcomplex.cc \

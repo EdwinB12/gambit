@@ -278,19 +278,20 @@ gbtTablePlayerToolbar::gbtTablePlayerToolbar(gbtNfgPanel *p_parent, gbtGameDocum
 
 void gbtTablePlayerToolbar::OnUpdate()
 {
-  while (m_playerPanels.Length() < m_doc->NumPlayers()) {
-    auto *panel = new gbtTablePlayerPanel(this, m_nfgPanel, m_doc, m_playerPanels.Length() + 1);
+  while (m_playerPanels.size() < m_doc->NumPlayers()) {
+    auto *panel = new gbtTablePlayerPanel(this, m_nfgPanel, m_doc, m_playerPanels.size() + 1);
     m_playerPanels.push_back(panel);
     GetSizer()->Add(panel, 0, wxALL | wxEXPAND, 5);
   }
 
-  while (m_playerPanels.Length() > m_doc->NumPlayers()) {
-    gbtTablePlayerPanel *panel = m_playerPanels.Remove(m_playerPanels.Length());
+  while (m_playerPanels.size() > m_doc->NumPlayers()) {
+    gbtTablePlayerPanel *panel = m_playerPanels.back();
     GetSizer()->Detach(panel);
     panel->Destroy();
+    m_playerPanels.pop_back();
   }
 
-  for (int pl = 1; pl <= m_playerPanels.Length(); pl++) {
+  for (int pl = 1; pl <= m_playerPanels.size(); pl++) {
     m_playerPanels[pl]->OnUpdate();
   }
 
@@ -299,7 +300,7 @@ void gbtTablePlayerToolbar::OnUpdate()
 
 void gbtTablePlayerToolbar::PostPendingChanges()
 {
-  for (int pl = 1; pl <= m_playerPanels.Length(); pl++) {
+  for (int pl = 1; pl <= m_playerPanels.size(); pl++) {
     m_playerPanels[pl]->PostPendingChanges();
   }
 }
@@ -434,8 +435,8 @@ END_EVENT_TABLE()
 gbtNfgPanel::gbtNfgPanel(wxWindow *p_parent, gbtGameDocument *p_doc)
   : wxPanel(p_parent, wxID_ANY), gbtGameView(p_doc),
     m_dominanceToolbar(new gbtStrategyDominanceToolbar(this, m_doc)),
-    m_tableWidget(new gbtTableWidget(this, wxID_ANY, m_doc)),
-    m_playerToolbar(new gbtTablePlayerToolbar(this, m_doc))
+    m_playerToolbar(new gbtTablePlayerToolbar(this, m_doc)),
+    m_tableWidget(new gbtTableWidget(this, wxID_ANY, m_doc))
 {
   auto *playerSizer = new wxBoxSizer(wxHORIZONTAL);
   playerSizer->Add(m_playerToolbar, 0, wxEXPAND, 0);

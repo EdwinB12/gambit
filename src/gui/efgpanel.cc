@@ -582,19 +582,20 @@ gbtTreePlayerToolbar::gbtTreePlayerToolbar(wxWindow *p_parent, gbtGameDocument *
 
 void gbtTreePlayerToolbar::OnUpdate()
 {
-  while (m_playerPanels.Length() < m_doc->NumPlayers()) {
-    auto *panel = new gbtTreePlayerPanel(this, m_doc, m_playerPanels.Length() + 1);
+  while (m_playerPanels.size() < m_doc->NumPlayers()) {
+    auto *panel = new gbtTreePlayerPanel(this, m_doc, m_playerPanels.size() + 1);
     m_playerPanels.push_back(panel);
     GetSizer()->Add(panel, 0, wxALL | wxEXPAND, 5);
   }
 
-  while (m_playerPanels.Length() > m_doc->NumPlayers()) {
-    gbtTreePlayerPanel *panel = m_playerPanels.Remove(m_playerPanels.Length());
+  while (m_playerPanels.size() > m_doc->NumPlayers()) {
+    gbtTreePlayerPanel *panel = m_playerPanels.back();
     GetSizer()->Detach(panel);
     panel->Destroy();
+    m_playerPanels.pop_back();
   }
 
-  for (int pl = 1; pl <= m_playerPanels.Length(); pl++) {
+  for (int pl = 1; pl <= m_playerPanels.size(); pl++) {
     m_playerPanels[pl]->OnUpdate();
   }
 
@@ -603,7 +604,7 @@ void gbtTreePlayerToolbar::OnUpdate()
 
 void gbtTreePlayerToolbar::PostPendingChanges()
 {
-  for (int pl = 1; pl <= m_playerPanels.Length(); pl++) {
+  for (int pl = 1; pl <= m_playerPanels.size(); pl++) {
     m_playerPanels[pl]->PostPendingChanges();
   }
 }
@@ -622,8 +623,8 @@ END_EVENT_TABLE()
 
 gbtEfgPanel::gbtEfgPanel(wxWindow *p_parent, gbtGameDocument *p_doc)
   : wxPanel(p_parent, wxID_ANY), gbtGameView(p_doc), m_treeWindow(new gbtEfgDisplay(this, m_doc)),
-    m_playerToolbar(new gbtTreePlayerToolbar(this, m_doc)),
-    m_dominanceToolbar(new gbtBehavDominanceToolbar(this, m_doc))
+    m_dominanceToolbar(new gbtBehavDominanceToolbar(this, m_doc)),
+    m_playerToolbar(new gbtTreePlayerToolbar(this, m_doc))
 {
   auto *topSizer = new wxBoxSizer(wxVERTICAL);
   topSizer->Add(m_dominanceToolbar, 0, wxEXPAND, 0);

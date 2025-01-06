@@ -25,9 +25,8 @@
 
 #include "gambit.h"
 
-#include "gsolver.h"
 #include "odometer.h"
-#include "rectangl.h"
+#include "rectangle.h"
 #include "gpoly.h"
 #include "gpolylst.h"
 #include "gpartltr.h"
@@ -53,20 +52,16 @@ are required to be nonnegative.
 
 template <class T> class IneqSolv {
 private:
-  const gPolyList<T> System;
-  const ListOfPartialTrees<T> TreesOfPartials;
+  gPolyList<T> System;
+  ListOfPartialTrees<T> TreesOfPartials;
   T Epsilon;
-  //        bool                         HasBeenSolved;
-  //        gTriState                    HasASolution;
-  //        Gambit::Vector<T>                   Sample;
 
   // Routines Doing the Actual Work
-
   bool IsASolution(const Gambit::Vector<T> &) const;
 
-  bool SystemHasNoSolutionIn(const gRectangle<T> &r, Gambit::Array<int> &) const;
+  bool SystemHasNoSolutionIn(const Rectangle<T> &r, Gambit::Array<int> &) const;
 
-  bool ASolutionExistsRecursion(const gRectangle<T> &, Gambit::Vector<T> &,
+  bool ASolutionExistsRecursion(const Rectangle<T> &, Gambit::Vector<T> &,
                                 Gambit::Array<int> &) const;
 
 public:
@@ -80,14 +75,13 @@ public:
   bool operator!=(const IneqSolv<T> &) const;
 
   // Information
-  inline const gSpace *AmbientSpace() const { return System.AmbientSpace(); }
-  inline const term_order *TermOrder() const { return System.TermOrder(); }
-  inline int Dmnsn() const { return System.Dmnsn(); }
-  inline gPolyList<T> UnderlyingEquations() const { return System; }
-  inline T ErrorTolerance() const { return Epsilon; }
+  const VariableSpace *AmbientSpace() const { return System.AmbientSpace(); }
+  int Dmnsn() const { return System.Dmnsn(); }
+  const gPolyList<T> &UnderlyingEquations() const { return System; }
+  T ErrorTolerance() const { return Epsilon; }
 
   // The function that does everything
-  bool ASolutionExists(const gRectangle<T> &, Gambit::Vector<T> &sample);
+  bool ASolutionExists(const Rectangle<T> &, Gambit::Vector<T> &sample);
 };
 
 #endif // INEQSOLV_H

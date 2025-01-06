@@ -25,7 +25,7 @@
 
 #include "gambit.h"
 #include "gtree.h"
-#include "rectangl.h"
+#include "rectangle.h"
 #include "gpoly.h"
 #include "gpolylst.h"
 
@@ -71,10 +71,10 @@ public:
   T ValueOfRootPoly(const Gambit::Vector<T> &point) const;
   T ValueOfPartialOfRootPoly(const int &, const Gambit::Vector<T> &) const;
   Gambit::Vector<T> VectorOfPartials(const Gambit::Vector<T> &) const;
-  bool PolyHasNoRootsIn(const gRectangle<T> &) const;
-  bool MultiaffinePolyHasNoRootsIn(const gRectangle<T> &) const;
-  bool PolyEverywhereNegativeIn(const gRectangle<T> &) const;
-  bool MultiaffinePolyEverywhereNegativeIn(const gRectangle<T> &) const;
+  bool PolyHasNoRootsIn(const Rectangle<T> &) const;
+  bool MultiaffinePolyHasNoRootsIn(const Rectangle<T> &) const;
+  bool PolyEverywhereNegativeIn(const Rectangle<T> &) const;
+  bool MultiaffinePolyEverywhereNegativeIn(const Rectangle<T> &) const;
 
   // friend gOutput& operator << (gOutput& output, const TreeOfPartials<T>& x);
 };
@@ -103,7 +103,7 @@ public:
   const TreeOfPartials<T> &operator[](int i) const { return PartialTreeList[i]; }
 
   // Information
-  int Length() const { return PartialTreeList.Length(); }
+  int Length() const { return PartialTreeList.size(); }
   int Dmnsn() const { return PartialTreeList.front().Dmnsn(); }
   Gambit::Matrix<T> DerivativeMatrix(const Gambit::Vector<T> &) const;
   Gambit::Matrix<T> DerivativeMatrix(const Gambit::Vector<T> &, const int &) const;
