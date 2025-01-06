@@ -636,7 +636,10 @@ gambit_SOURCES = \
 if IS_WIN32
 gambit_LDADD = $(RC_OBJECT_PATH) $(WX_LIBS_STATIC) -ldeflate -lzstd -llerc -lWebP
 else
+if IS_MAC 
 gambit_LDADD = $(RC_OBJECT_PATH) $(WX_LIBS_STATIC)
+else
+gambit_LDADD = $(RC_OBJECT_PATH) $(WX_LIBS)
 endif
 
 
