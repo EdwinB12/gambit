@@ -1,6 +1,6 @@
 //
 // This file is part of Gambit
-// Copyright (c) 1994-2024, The Gambit Project (http://www.gambit-project.org)
+// Copyright (c) 1994-2025, The Gambit Project (https://www.gambit-project.org)
 //
 // FILE: src/libgambit/vector.h
 // A vector class
@@ -130,6 +130,12 @@ public:
     return tmp;
   }
 
+  Vector<T> &operator/=(const T &c)
+  {
+    std::transform(this->cbegin(), this->cend(), this->begin(), [&](const T &v) { return v / c; });
+    return *this;
+  }
+
   bool operator==(const Vector<T> &V) const
   {
     if (!Check(V)) {
@@ -152,8 +158,7 @@ public:
   // square of length
   T NormSquared() const
   {
-    return std::accumulate(this->begin(), this->end(), static_cast<T>(0),
-                           [](const T &t, const T &v) { return t + v * v; });
+    return std::inner_product(this->begin(), this->end(), this->begin(), static_cast<T>(0));
   }
 };
 

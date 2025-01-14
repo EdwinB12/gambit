@@ -1,6 +1,6 @@
 //
 // This file is part of Gambit
-// Copyright (c) 1994-2024, The Gambit Project (http://www.gambit-project.org)
+// Copyright (c) 1994-2025, The Gambit Project (https://www.gambit-project.org)
 //
 // FILE: src/libgambit/array.h
 // A basic bounds-checked array type
@@ -196,7 +196,7 @@ public:
   {
     if (this != &a) {
       // We only reallocate if necessary.
-      if (!m_data || (m_data && (m_offset != a.m_offset || m_length == a.m_length))) {
+      if (!m_data || (m_data && (m_offset != a.m_offset || m_length != a.m_length))) {
         if (m_data) {
           delete[] (m_data + m_offset);
         }
