@@ -47,7 +47,7 @@ jobs:
             cd wxWidgets-3.2.6
             mkdir build-release
             cd build-release
-            ../configure --disable-shared --disable-sys-libs
+            ../configure --with-wxdir=wxWidgets-3.2.6 --disable-shared --disable-sys-libs
             make -j4
             sudo make install
       - run: aclocal
@@ -75,7 +75,7 @@ jobs:
             cd wxWidgets-3.2.6
             mkdir build-release
             cd build-release
-            ../configure --disable-shared --disable-sys-libs
+            ../configure --with-wxdir=wxWidgets-3.2.6 --disable-shared --disable-sys-libs
             make -j4
             sudo make install
       - run: aclocal
